@@ -10,6 +10,9 @@ button,input,select{font:inherit}button{cursor:pointer}a{text-decoration:none;co
 :root{--blue:#4143F6;--lime:#DDF344;--cream:#FFF9EB;--sky:#1FA6FE;--ink:#17181F;--muted:#6B6D7B}
 .nav{height:92px;display:flex;align-items:center;justify-content:space-between;gap:16px;background:var(--blue);width:100%;padding:0 12px}
 .logo-link{display:flex;align-items:center;flex:none;text-decoration:none}.logo{width:104px;height:104px;object-fit:contain;flex:none;display:block}.nav-links{display:none}.nav-actions{display:flex;align-items:center;gap:8px;flex:none}.signup{border:0;background:var(--lime);color:var(--ink);border-radius:999px;padding:10px 17px;font-weight:500;min-width:104px;font-size:13px;line-height:1}
+.logout-btn{border:1px solid rgba(255,249,235,.65);background:transparent;color:var(--cream);border-radius:999px;padding:9px 15px;font-weight:500;font-size:13px;line-height:1;white-space:nowrap}
+.logout-btn:hover{background:rgba(255,249,235,.1)}
+.logout-btn[hidden]{display:none}
 .hero{height:520px;aspect-ratio:auto;width:100%;position:relative;overflow:hidden;background:var(--blue)}
 .hero-photo{position:absolute;inset:0;z-index:0;background-size:cover;background-position:center center;background-repeat:no-repeat}.hero-photo img{display:none}
 .hero-photo:after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,rgba(65,67,246,.10) 0%,rgba(65,67,246,.04) 45%,rgba(65,67,246,.00) 100%)}
@@ -78,11 +81,11 @@ input,select{width:100%;border:0;outline:0;background:transparent;color:var(--in
 </style><!-- IMAGE SYSTEM: Replace files inside /images without changing HTML. See IMAGE-GUIDE.txt. -->
 </head><body>
 <nav class="nav">
-  <a class="logo-link" href="#home" aria-label="กลับหน้าหลัก">
+  <a class="logo-link" href="./index.html#home" aria-label="กลับหน้าหลัก">
   <img class="logo" src="images/quechae-logo.jpg" alt="QueChae">
   </a>
   <div class="nav-links"><a href="#home">หน้าหลัก</a><a href="#search">ค้นหาช่างภาพ</a><a href="#">วิธีใช้งาน</a><a href="#about">เกี่ยวกับฉัน</a><a href="#featured">ช่างภาพดาวเด่น</a><a href="#">สำหรับช่างภาพ</a></div>
-  <div class="nav-actions"><button class="menu-toggle" type="button" aria-label="เปิดเมนู" aria-expanded="false"><span></span><span></span><span></span></button><a class="signup" href="quechae-auth.html">เข้าสู่ระบบ</a></div>
+  <div class="nav-actions"><button class="menu-toggle" type="button" aria-label="เปิดเมนู" aria-expanded="false"><span></span><span></span><span></span></button><a class="signup" id="loginLink" href="./quechae-auth.html" target="_self">เข้าสู่ระบบ</a><button class="logout-btn" id="logoutBtn" type="button" hidden>ออกจากระบบ</button></div>
 </nav>
 <section class="hero" id="home"><div class="hero-photo" style="background-image:url(images/hero.jpg)"></div></section>
 <section class="search-wrap" id="search"><div class="search-card">
@@ -877,4 +880,52 @@ button:active{transform:translateY(0) scale(.985)!important}
   .location-helper{font-size:8.5px}
 }
 </style>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+(function(){
+  const login = document.getElementById('loginLink');
+  const logout = document.getElementById('logoutBtn');
+  if(login){
+    login.addEventListener('click', function(e){
+      e.preventDefault();
+      window.location.assign('./quechae-auth.html');
+    });
+  }
+
+  const SUPABASE_URL = 'https://kleutavfwtbefeoowgnu.supabase.co';
+  const SUPABASE_KEY = 'sb_publishable_mYLsuV1GNZGh9_ieNfIc-g_dfmSVjKL';
+
+  if(!window.supabase || !logout || !login) return;
+
+  const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+  function setAuthUI(session){
+    const loggedIn = !!session;
+    login.hidden = loggedIn;
+    logout.hidden = !loggedIn;
+  }
+
+  supabaseClient.auth.getSession().then(function(result){
+    setAuthUI(result.data && result.data.session ? result.data.session : null);
+  });
+
+  supabaseClient.auth.onAuthStateChange(function(_event, session){
+    setAuthUI(session || null);
+  });
+
+  logout.addEventListener('click', async function(){
+    logout.disabled = true;
+    logout.textContent = 'กำลังออก...';
+    const result = await supabaseClient.auth.signOut();
+    if(result.error){
+      logout.disabled = false;
+      logout.textContent = 'ออกจากระบบ';
+      alert('ออกจากระบบไม่สำเร็จ: ' + result.error.message);
+      return;
+    }
+    setAuthUI(null);
+    window.location.href = './index.html';
+  });
+})();
+</script>
 </body></html>
