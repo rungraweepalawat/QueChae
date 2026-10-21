@@ -1,0 +1,18 @@
+QueChae V48 — Booking / Payment Flow Prototype
+
+1. Search Results / Photographer Profile
+   - ปุ่ม "จองคิว" จะพาไป booking-chat.html?id=<photographer>
+   - ไม่มีปุ่ม "ติดต่อด่วน" บนหน้า Photographer Profile
+
+2. Booking Chat
+   - ลูกค้าและช่างภาพคุยกันในระบบ QueChae
+   - แสดงสรุปงานและราคา
+   - มี CTA "ชำระเงินให้ QueChae"
+   - Prototype แสดงสถานะเงินอยู่กับแพลตฟอร์ม และรอการถ่ายงาน
+
+3. งานเสร็จ
+   - ลูกค้ากด "ยืนยันงานเสร็จสิ้น"
+   - Prototype แสดงสถานะเตรียมจ่ายช่างภาพตามรอบการจ่ายของ QueChae ภายใน 1 วัน
+
+หมายเหตุ: หน้านี้เป็น UX prototype ยังไม่เชื่อม Payment Gateway / Backend / Chat จริง
+Production ควรต่อระบบบัญชี, Payment Gateway, Booking state, webhook และ payout rules ก่อนใช้งานเงินจริง

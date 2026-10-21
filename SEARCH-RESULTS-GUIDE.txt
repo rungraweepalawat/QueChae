@@ -1,0 +1,1 @@
+V43: search-results redesigned to match the homepage design system. Keep index.html + search-results.html + images/.

@@ -1,0 +1,8 @@
+QueChae V47 image guide
+These are temporary realistic mockup images for the photographer profile and portfolio cards.
+Replace them later in GitHub using the exact same filenames:
+hero.jpg
+mind-profile.jpg / mind-01.jpg / mind-02.jpg / mind-03.jpg
+james-profile.jpg / james-01.jpg / james-02.jpg / james-03.jpg
+phrae-profile.jpg / phrae-01.jpg / phrae-02.jpg / phrae-03.jpg
+The profile files are square portraits. Portfolio files are square samples for graduation, cafe, portrait, wedding/lifestyle contexts.
